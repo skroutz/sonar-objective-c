@@ -1,45 +1,42 @@
 /*
- * Sonar Objective-C Plugin
- * Copyright (C) 2012 OCTO Technology, Backelite
- * dev@sonar.codehaus.org
+ * Objective-C Sonar Plugin - Enables analysis of Objective-C projects into SonarQube.
+ * Copyright © 2012 OCTO Technology, Backelite (${email})
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.sonar.plugins.objectivec;
 
-import java.util.List;
-
-import org.sonar.api.Extension;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
-import org.sonar.plugins.objectivec.complexity.LizardSensor;
-import org.sonar.plugins.objectivec.coverage.CoberturaSensor;
 import org.sonar.plugins.objectivec.colorizer.ObjectiveCColorizerFormat;
+import org.sonar.plugins.objectivec.complexity.LizardSensor;
 import org.sonar.plugins.objectivec.core.ObjectiveC;
+import org.sonar.plugins.objectivec.coverage.CoberturaSensor;
 import org.sonar.plugins.objectivec.cpd.ObjectiveCCpdMapping;
-
-import com.google.common.collect.ImmutableList;
-
-import org.sonar.plugins.objectivec.tests.SurefireSensor;
 import org.sonar.plugins.objectivec.violations.ObjectiveCProfile;
 import org.sonar.plugins.objectivec.violations.fauxpas.FauxPasProfile;
 import org.sonar.plugins.objectivec.violations.fauxpas.FauxPasProfileImporter;
 import org.sonar.plugins.objectivec.violations.fauxpas.FauxPasRulesDefinition;
 import org.sonar.plugins.objectivec.violations.fauxpas.FauxPasSensor;
-import org.sonar.plugins.objectivec.violations.oclint.*;
+import org.sonar.plugins.objectivec.violations.oclint.OCLintProfile;
+import org.sonar.plugins.objectivec.violations.oclint.OCLintProfileImporter;
+import org.sonar.plugins.objectivec.violations.oclint.OCLintRulesDefinition;
+import org.sonar.plugins.objectivec.violations.oclint.OCLintSensor;
+
+import java.util.List;
 
 @Properties({
         @Property(key = CoberturaSensor.REPORT_PATTERN_KEY, defaultValue = CoberturaSensor.DEFAULT_REPORT_PATTERN, name = "Path to unit test coverage report(s)", description = "Relative to projects' root. Ant patterns are accepted", global = false, project = true),
@@ -49,14 +46,13 @@ import org.sonar.plugins.objectivec.violations.oclint.*;
 })
 public class ObjectiveCPlugin extends SonarPlugin {
 
-    public List<Class<? extends Extension>> getExtensions() {
+    public List getExtensions() {
         return ImmutableList.of(ObjectiveC.class,
                 ObjectiveCColorizerFormat.class,
                 ObjectiveCCpdMapping.class,
 
                 ObjectiveCSquidSensor.class,
                 ObjectiveCProfile.class,
-                SurefireSensor.class,
                 CoberturaSensor.class,
 
                 OCLintRulesDefinition.class,
